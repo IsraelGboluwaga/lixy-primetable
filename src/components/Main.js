@@ -15,7 +15,7 @@ const Controls = styled.div`
 	padding-top: 15vh;
 `
 const Input = styled.input`
-	height: 2rem;
+	height: 1.4rem;
 	border-radius: 5px;
 	border: 1px solid #cccccc;
 	padding: 5px;
@@ -39,22 +39,42 @@ const Button = styled((props) => <button {...props} />)`
 		background-color: ${(props) => !props.backgroundHover ? '#1fb71f' : props.backgroundHover};
     cursor: pointer;
 	}
+	&:disabled {
+		cursor: not-allowed;
+		pointer-events: all !important;
+		background-color: #cccccc
+	}
 `
 
 const Main = (props) => {
 	const [isTableLoaded, setTableLoaded] = useState(false)
+	const [disabled, setDisabled] = useState(true)
+	const [showReset, setShowReset] = useState(false)
 	const [tableSize, setTableSize] = useState(0)
 	const reset = () => {
 		setTableSize(0)
 		setTableLoaded(false)
+		setShowReset(false)
+		setDisabled(true)
+	}
+
+	const generate = () => {
+		setShowReset(true)
+		setTableLoaded(true)
+	}
+
+	const handleInputChange = (e) => {
+		setTableSize(e.target.value)
+		if (disabled && e.target.value > 0) setDisabled(false)
 	}
 
 	return (
 		<Container>
 			<Controls>
-				<Input type='number' min='0' value={tableSize} onChange={(e) => setTableSize(e.target.value)}/>
-        <Button onClick={() => setTableLoaded(true)}>Generate Table</Button>
-				<Button backgroundColor='#c13d5b' backgroundHover='#b7193d' onClick={reset}>Reset</Button>
+				<Input type='number' min='0' value={tableSize} onChange={handleInputChange} />
+				<Button disabled={disabled} onClick={generate}>Generate Table</Button>
+				{showReset ?
+					<Button backgroundColor='#c13d5b' backgroundHover='#b7193d' onClick={reset}>Reset</Button> : null}
 			</Controls>
 			<>
 				{isTableLoaded ? <PrimeTable size={tableSize} /> : null}

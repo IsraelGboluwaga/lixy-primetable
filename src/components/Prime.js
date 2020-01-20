@@ -18,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
     tr {
       padding: 5px;
 		}
-		tr:nth-child(even) {
+		tr:nth-child(odd) {
 			 background-color: #ddeeff;
 		}
     th {
@@ -36,7 +36,6 @@ const PrimeTable = (props) => {
 	const { size } = props
 	const primes = generatePrimes(size)
 	const multiples = createPrimeArrays(primes)
-	console.log(multiples)
 	return (
 		<>
 			<GlobalStyle />
